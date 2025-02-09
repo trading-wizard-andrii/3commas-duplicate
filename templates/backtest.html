@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Trading Strategy Configuration</title>
+  <link rel="stylesheet" href="/templates/css/styles.css">
+</head>
+<body>
+<!-- Main Section -->
+  <div class="section" id="main">
+    <h2>Main <span class="toggle-arrow">&#9654;</span></h2>
+    <div class="section-content">
+      <div class="input-group">
+        <label for="strategy-name">Strategy Name</label>
+        <input type="text" id="strategy-name" placeholder="Enter strategy name">
+      </div>
+      <div class="input-group">
+        <label for="crypto-pairs">Select Cryptocurrencies</label>
+        <div class="dropdown">
+          <button id="dropdown-toggle">Select Pairs</button>
+          <div class="dropdown-list" id="dropdown-list">
+            <!-- Cryptocurrency pairs will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="max-active-deals">Max Active Deals</label>
+        <input type="number" id="max-active-deals" placeholder="Enter max active deals">
+      </div>
+      <div class="input-group">
+        <label for="trading-fee">Trading Fee</label>
+        <input type="number" id="trading-fee" placeholder="Enter the trading fee">
+      </div>
+      <div class="input-group">
+        <label for="initial-balance">Initial balance</label>
+        <input type="number" id="initial-balance" placeholder="Enter the initial balance">
+      </div>
+
+      <!-- NEW CODE FOR PERIODS -->
+      <hr>
+      <div class="input-group">
+        <label for="period-name">Period Name</label>
+        <input type="text" id="period-name" placeholder="Enter period name">
+        <div class="input-group">
+          <label for="start-date">Start Date</label>
+          <input type="date" id="start-date">
+        </div>
+        <!-- New End Date Input -->
+        <div class="input-group">
+          <label for="end-date">End Date</label>
+          <input type="date" id="end-date">
+        </div>
+        <button id="save-period-btn">Save Period</button>
+      </div>
+      <!-- New Start Date Input -->
+
+      <!-- New: pick or delete period -->
+      <div class="input-group">
+        <label for="period-dropdown">Pick period</label>
+        <select id="period-dropdown">
+          <option value="">-- Select a saved period --</option>
+        </select>
+        <button id="delete-period-btn" style="margin-left: 0.5em;">Delete Period❌</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="entry-order">
+    <h2>Entry Order <span class="toggle-arrow">&#9654;</span></h2>
+    <div class="section-content">
+      <div class="input-group">
+        <label for="base-order-size">Base Order Size</label>
+        <input type="number" id="base-order-size" placeholder="Enter base order size">
+      </div>
+
+      <div id="deal-start-condition-config">
+        <div class="condition-group" id="entry-condition-group">
+          <!-- Conditions will be dynamically added here -->
+        </div>
+        <button class="add-condition-btn" id="add-entry-condition">+ Add Condition</button>
+      </div>
+
+      <!-- Safety Order Section -->
+      <div class="toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="safety-order-toggle">
+          <span class="slider"></span>
+        </label>
+        <label for="safety-order-toggle" class="toggle-label">Enable Safety Orders</label>
+      </div>
+      <div id="safety-order-config" style="display: none;">
+        <div class="input-group">
+          <label for="safety-order-size">Safety Order Size</label>
+          <input type="number" id="safety-order-size" placeholder="Enter safety order size">
+        </div>
+        <div class="input-group">
+          <label for="price-deviation">Price Deviation</label>
+          <input type="number" id="price-deviation" placeholder="Enter price deviation">
+        </div>
+        <div class="input-group">
+          <label for="max-safety-orders-count">Max Safety Orders Count</label>
+          <input type="number" id="max-safety-orders-count" placeholder="Enter max safety orders count">
+        </div>
+        <div class="input-group">
+          <label for="safety-order-volume-scale">Safety Order Volume Scale</label>
+          <input type="number" id="safety-order-volume-scale" placeholder="Enter safety order volume scale">
+        </div>
+        <div class="input-group">
+          <label for="safety-order-step-scale">Safety Order Step Scale</label>
+          <input type="number" id="safety-order-step-scale" placeholder="Enter safety order step scale">
+        </div>
+        <div class="condition-group" id="safety-condition-group">
+          <!-- Example of a dynamically added condition -->
+          <div class="condition">
+            <label>Safety Condition</label>
+          </div>
+        </div>
+        <button class="add-condition-btn" id="add-safety-condition">+ Add Safety Condition</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exit Order Section -->
+  <div class="section" id="exit-order">
+    <h2>Exit Order <span class="toggle-arrow">&#9654;</span></h2>
+    <div class="section-content">
+      <!-- Price Change % and Conditions Toggle -->
+      <div class="btn-group">
+        <button class="btn" id="price-change-btn">Price Change %</button>
+        <button class="btn" id="conditions-btn">Conditions</button>
+      </div>
+
+      <!-- Price Change % View -->
+      <div id="price-change-config" class="exit-config">
+        <div class="input-group">
+          <label for="take-profit-type">Take Profit Type</label>
+          <select id="take-profit-type">
+            <option value="percentage-total">Percentage from Total Volume</option>
+            <option value="percentage-base">Percentage from Base Order</option>
+          </select>
+        </div>
+
+        <label for="target-profit">Target profit</label>
+        <input type="number" id="target-profit" placeholder="Enter target profit">
+        <label for="target-volume">Target Volume</label>
+        <input type="number" id="target-volume" placeholder="Enter target volume">
+
+                <!-- Trailing Deviation Toggle -->
+        <div class="toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" id="trailing-toggle">
+            <span class="slider"></span>
+          </label>
+          <label for="trailing-toggle" class="toggle-label">Enable Trailing Deviation</label>
+        </div>
+      </div>
+
+      <!-- Conditions View -->
+      <div id="conditions-config" class="exit-config" style="display: none;">
+        <div class="condition-group" id="exit-condition-group">
+          <!-- Example of a dynamically added condition -->
+          <div class="exit-condition">
+            <label>Exit Condition</label>
+          </div>
+        </div>
+        <button class="add-condition-btn" id="add-exit-condition">+ Add Exit Condition</button>
+
+        <div class="toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" id="min-profit-toggle">
+            <span class="slider"></span>
+          </label>
+          <label for="min-profit-toggle" class="toggle-label">Enable Minimum Profit</label>
+        </div>
+
+        <!-- Minimum profit input -->
+        <div class="input-group">
+          <label for="minimum-profit">Minimum Protit (%)</label>
+          <input type="number" id="min-profit" placeholder="Enter minimum profit %" disabled>
+        </div>
+      </div>
+      <script>
+        // 1) Grab references
+        const minProfitToggle = document.getElementById("min-profit-toggle");
+        const minProfitInput  = document.getElementById("min-profit");
+
+        // 2) Whenever the toggle changes, enable/disable the input
+        minProfitToggle.addEventListener("change", function() {
+          if (this.checked) {
+            minProfitInput.disabled = false;
+          } else {
+            minProfitInput.disabled = true;
+          }
+        });
+      </script>
+
+      <div class="input-group">
+        <label for="reinvest-profit">Reinvest Profit</label>
+        <input type="number" id="reinvest-profit" placeholder="Enter reinvest profit %">
+      </div>
+      <!-- Stop Loss Section -->
+      <div class="toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="stop-loss-toggle">
+          <span class="slider"></span>
+        </label>
+        <label for="stop-loss-toggle" class="toggle-label">Enable Stop Loss</label>
+      </div>
+      <div id="stop-loss-config" style="display: none;">
+        <div class="input-group">
+          <label for="stop-loss-value">Stop Loss (%)</label>
+          <input type="number" id="stop-loss-value" placeholder="Enter stop loss %">
+          <label for="stop-loss-timeout">Stop Loss Timeout</label>
+          <input type="number" id="stop-loss-timeout" placeholder="Enter stop loss timeout">
+          <label for="risk-reduction">Risk Reduction</label>
+          <input type="number" id="risk-reduction" placeholder="Enter risk reduction">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Section -->
+  <div class="section" id="advanced">
+    <h2>Advanced <span class="toggle-arrow">&#9654;</span></h2>
+    <div class="section-content">
+      <div class="input-group">
+        <label for="min-daily-volume">Minimum Daily Volume (BTC)</label>
+        <input type="number" id="min-daily-volume" placeholder="Enter minimum daily volume">
+      </div>
+      <div class="input-group">
+        <label for="cooldown-between-deals">Cooldown Between Deals (seconds)</label>
+        <input type="number" id="cooldown-between-deals" placeholder="Enter cooldown in seconds">
+      </div>
+    </div>
+  </div>
+  <!-- NEW: Section to show "All Strategies" table -->
+  <!-- Section to show "All Strategies" table -->
+  <div class="section" id="all-strategies">
+    <h2>All Strategies</h2>
+    <div class="table-container">
+      <button id="load-strategies-btn" class="styled-button">Load Strategies</button>
+      <table class="strategies-table" id="strategies-table">
+        <!-- We'll populate table headers & rows via JS -->
+      </table>
+    </div>
+  </div>
+
+  <div class="input-group">
+      <button id="run-backtest-btn" class="styled-button">Run Backtest</button>
+      <!-- ADDED: "View Strategy Results" button (initially hidden) -->
+      <button id="view-results-btn" class="styled-button" style="display:none; margin-left:0.5em;">View Strategy Results</button>
+      <!-- ADDED: "Go Back to Home" button -->
+      <button id="go-home-btn" class="styled-button" style="margin-left:0.5em;">Load data</button>
+  </div>
+
+
+  <script src="/templates/js/script.js"></script>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────
+    // 1) HELPER: GATHER SUB-FIELDS FOR A SINGLE INDICATOR CONDITION
+    // ─────────────────────────────────────────────────────────────
+    function gatherConditionData(conditionElement) {
+      const indicatorSelect = conditionElement.querySelector('.indicator-select');
+      if (!indicatorSelect) return null;
+      const indicatorName = indicatorSelect.value;
+
+      const operatorValue = conditionElement.querySelector('.operator-select')?.value || null;
+      const numericVal = parseFloat(conditionElement.querySelector('.value-input')?.value) || null;
+
+      const dynamicInputs = conditionElement.querySelector('.dynamic-inputs');
+      const subfields = {};
+      if (dynamicInputs) {
+        const inputGroups = dynamicInputs.querySelectorAll('.input-group');
+        inputGroups.forEach(group => {
+          const labels = group.querySelectorAll('label');
+          const fields = group.querySelectorAll('select, input[type="number"], input[type="text"]');
+          for (let i = 0; i < labels.length; i++) {
+            const labelText = labels[i].innerText.trim();
+            const field = fields[i];
+            if (!field) continue;
+            if (field.tagName.toLowerCase() === 'select') {
+              subfields[labelText] = field.value;
+            } else {
+              const numeric = parseFloat(field.value);
+              subfields[labelText] = isNaN(numeric) ? field.value : numeric;
+            }
+          }
+        });
+      }
+
+      return {
+        indicator: indicatorName,
+        operator: operatorValue,
+        value: numericVal,
+        subfields: subfields
+      };
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 2) HELPER: GATHER A LIST OF CONDITIONS FROM A GROUP
+    // ─────────────────────────────────────────────────────────────
+    function gatherConditions(groupId) {
+      const groupElem = document.getElementById(groupId);
+      if (!groupElem) return [];
+      const conditionElems = groupElem.querySelectorAll('.condition');
+      const results = [];
+      conditionElems.forEach(elem => {
+        const c = gatherConditionData(elem);
+        if (c && c.indicator) {
+          results.push(c);
+        }
+      });
+      return results;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // 4) MAIN FUNCTION: Collect All Inputs & POST to /run_backtest
+    // ─────────────────────────────────────────────────────────────
+    async function collectAllInputsAndRunBacktest() {
+      // Strategy Name
+      const strategyName = document.getElementById('strategy-name')?.value.trim() || '';
+
+      // Pairs: read the checkboxes in #dropdown-list
+      const dropdownList = document.getElementById('dropdown-list');
+      let selectedPairs = [];
+      if (dropdownList) {
+        const checkboxes = dropdownList.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(chk => {
+          if (chk.checked) {
+            selectedPairs.push(chk.value.trim());
+          }
+        });
+      }
+
+      // Max Active Deals
+      const maxActiveDeals = parseInt(document.getElementById('max-active-deals')?.value, 10) || 0;
+
+      // Trading Fee
+      const tradingFee = parseFloat(document.getElementById('trading-fee')?.value) || 0;
+
+      // Initial balance
+      const initialBalance = parseFloat(document.getElementById('initial-balance')?.value) || 0;
+
+      // Start Date
+      const startDate = document.getElementById('start-date')?.value || '';
+      // End Date
+      const endDate = document.getElementById('end-date')?.value || '';
+
+      // Base Order Size
+      let baseOrderSize = parseFloat(document.getElementById('base-order-size')?.value) || 0;
+
+      // ENTRY CONDITIONS
+      const entryConditions = gatherConditions('entry-condition-group');
+
+      // SAFETY ORDER TOGGLE & FIELDS
+      const safetyOrderToggle = document.getElementById('safety-order-toggle').checked;
+      const safetyOrderSize = parseFloat(document.getElementById('safety-order-size')?.value) || 0;
+      const priceDeviation = parseFloat(document.getElementById('price-deviation')?.value) || 0;
+      const maxSafetyOrdersCount = parseInt(document.getElementById('max-safety-orders-count')?.value, 10) || 0;
+      const safetyOrderVolumeScale = parseFloat(document.getElementById('safety-order-volume-scale')?.value) || 0;
+      const safetyOrderStepScale = parseFloat(document.getElementById('safety-order-step-scale')?.value) || 0;
+
+      // SAFETY CONDITIONS
+      const safetyConditions = gatherConditions('safety-condition-group');
+
+      // EXIT CONFIG: Price Change vs Conditions
+      const priceChangeConfig = document.getElementById('price-change-config');
+      const conditionsConfig = document.getElementById('conditions-config');
+      const priceChangeActive = (priceChangeConfig && priceChangeConfig.style.display === 'block');
+      const conditionsActive = (conditionsConfig && conditionsConfig.style.display === 'block');
+
+      // Take Profit & Volume
+      const takeProfitType = document.getElementById('take-profit-type')?.value || '';
+      const targetProfit = parseInt(document.getElementById('target-profit')?.value, 10) || 0;
+      const targetVolume = parseInt(document.getElementById('target-volume')?.value, 10) || 0;
+
+      // TRAILING
+      const trailingToggle = document.getElementById('trailing-toggle').checked;
+      let trailingDeviation = 0;
+      const trailingDevElem = document.getElementById('trailing-deviation');
+      if (trailingDevElem && !trailingDevElem.disabled) {
+        trailingDeviation = parseFloat(trailingDevElem.value) || 0;
+      }
+
+      // MINPROF
+      const minprofToggle = document.getElementById('min-profit-toggle').checked;
+      let minimalProfit = 0;
+      const minProfElem = document.getElementById('min-profit');
+      if (minProfElem && !minProfElem.disabled) {
+        minimalProfit = parseFloat(minProfElem.value) || 0;
+      }
+
+      // EXIT CONDITIONS
+      const exitConditions = gatherConditions('exit-condition-group');
+
+      // STOP LOSS
+      const reinvestProfit = parseFloat(document.getElementById('reinvest-profit')?.value) || 0;
+      const stopLossToggle = document.getElementById('stop-loss-toggle').checked;
+      const stopLossValue = parseFloat(document.getElementById('stop-loss-value')?.value) || 0;
+      const stopLossTimeout = parseFloat(document.getElementById('stop-loss-timeout')?.value) || 0;
+      const riskReduction = parseFloat(document.getElementById('risk-reduction')?.value) || 0;
+
+      // ADVANCED
+      const minDailyVolume = parseFloat(document.getElementById('min-daily-volume')?.value) || 0;
+      const cooldownBetweenDeals = parseInt(document.getElementById('cooldown-between-deals')?.value, 10) || 0;
+
+      // ─────────────────────────────────────────────
+      // NEW CODE FOR BALANCE CHECK
+      // ─────────────────────────────────────────────
+      let requiredBalanceForOneSymbol = 0;
+      // Start with the base order
+      requiredBalanceForOneSymbol += baseOrderSize;
+
+      // If safety orders are enabled, sum them up
+      if (safetyOrderToggle && maxSafetyOrdersCount > 0 && safetyOrderSize > 0) {
+        let soSum = 0;
+        let currentSOSize = safetyOrderSize;
+        for (let i = 0; i < maxSafetyOrdersCount; i++) {
+          soSum += currentSOSize;
+          // Next SO is multiplied by the volume scale
+          currentSOSize *= safetyOrderVolumeScale;
+        }
+        requiredBalanceForOneSymbol += soSum;
+      }
+
+      // Multiply by how many cryptos the user selected
+      const totalRequiredBalance = requiredBalanceForOneSymbol * selectedPairs.length;
+
+      // Compare vs. initialBalance
+      if (totalRequiredBalance > initialBalance) {
+        alert(
+          `You do not have enough balance!\n\n` +
+          `Required: ${totalRequiredBalance}\n` +
+          `Available: ${initialBalance}`
+        );
+        return; // STOP here, do not send fetch
+      }
+
+      // ─────────────────────────────────────────────
+      // BUILD THE PAYLOAD
+      // ─────────────────────────────────────────────
+      const payload = {
+        strategy_name: strategyName,
+        pairs: selectedPairs,
+        max_active_deals: maxActiveDeals,
+        trading_fee: tradingFee,
+        initial_balance: initialBalance,
+
+        start_date: startDate,
+        end_date: endDate,
+
+        base_order_size: baseOrderSize,
+        entry_conditions: entryConditions,
+
+        // Safety
+        safety_order_toggle: safetyOrderToggle,
+        safety_order_size: safetyOrderSize,
+        price_deviation: priceDeviation,
+        max_safety_orders_count: maxSafetyOrdersCount,
+        safety_order_volume_scale: safetyOrderVolumeScale,
+        safety_order_step_scale: safetyOrderStepScale,
+        safety_conditions: safetyConditions,
+
+        // Exit
+        price_change_active: priceChangeActive,
+        conditions_active: conditionsActive,
+        take_profit_type: takeProfitType,
+        target_volume: targetVolume,
+        target_profit: targetProfit,
+
+        trailing_toggle: trailingToggle,
+        trailing_deviation: trailingDeviation,
+        exit_conditions: exitConditions,
+        minprof_toggle: minprofToggle,
+        minimal_profit: minimalProfit,
+
+        reinvest_profit: reinvestProfit,
+
+        stop_loss_toggle: stopLossToggle,
+        stop_loss_value: stopLossValue,
+        stop_loss_timeout: stopLossTimeout,
+        risk_reduction: riskReduction,
+
+        // Advanced
+        min_daily_volume: minDailyVolume,
+        cooldown_between_deals: cooldownBetweenDeals
+      };
+
+      // ─────────────────────────────────────────────
+      // SEND THE PAYLOAD
+      // ─────────────────────────────────────────────
+      try {
+        const response = await fetch('/run_backtest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        console.log('Backtest Results:', result);
+
+        // NEW: If success => show "View Strategy Results" button
+        if (result.status === 'success') {
+          alert('Backtest completed successfully!');
+          const viewBtn = document.getElementById('view-results-btn');
+          if (viewBtn) {
+            viewBtn.style.display = 'inline-block';
+          }
+        } else {
+          alert(`Backtest failed: ${result.message || 'unknown error'}`);
+        }
+      } catch (error) {
+        console.error('Error during backtest:', error);
+      }
+    }
+
+    // 1) On page load, fetch existing periods
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadSavedPeriods();  // fill the dropdown
+    });
+
+    // 2) A function to load saved periods from the server
+    async function loadSavedPeriods() {
+      try {
+        const res = await fetch('/get_periods');
+        const data = await res.json();
+        // data might look like: [ { "period_name":"My Q1", "start_date":"2024-01-01", "end_date":"2024-03-31" }, ...]
+        const dropdown = document.getElementById('period-dropdown');
+        dropdown.innerHTML = '<option value="">-- Select a saved period --</option>';
+
+        // Create <option> for each saved period
+        data.forEach(period => {
+          const opt = document.createElement('option');
+          opt.value = period.period_name;  // This is how we'll identify the period
+          opt.textContent = `${period.period_name} ( ${period.start_date} - ${period.end_date} )`;
+          // Store dates in data attributes for auto-fill
+          opt.dataset.start = period.start_date;
+          opt.dataset.end   = period.end_date;
+
+          dropdown.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Error loading saved periods:', err);
+      }
+    }
+
+    // 3) Save button => POST /save_period
+    document.getElementById('save-period-btn').addEventListener('click', async () => {
+      const periodName = document.getElementById('period-name').value.trim();
+      const startDate  = document.getElementById('start-date').value;
+      const endDate    = document.getElementById('end-date').value;
+
+      if (!periodName || !startDate || !endDate) {
+        alert("Please fill Period Name, Start Date, and End Date.");
+        return;
+      }
+
+      try {
+        const payload = { period_name: periodName, start_date: startDate, end_date: endDate };
+        const res = await fetch('/save_period', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          alert('Period saved successfully!');
+          // Reload dropdown
+          await loadSavedPeriods();
+        } else {
+          alert(`Error saving period: ${result.message || 'unknown error'}`);
+        }
+      } catch (err) {
+        console.error('Error saving period:', err);
+      }
+    });
+
+    // 4) Delete button => POST /delete_period
+    document.getElementById('delete-period-btn').addEventListener('click', async () => {
+      const dropdown = document.getElementById('period-dropdown');
+      const selectedIndex = dropdown.selectedIndex;
+      if (selectedIndex <= 0) {
+        alert("No period selected to delete.");
+        return;
+      }
+      const selectedOpt = dropdown.options[selectedIndex];
+      const periodName = selectedOpt.value; // the "value" we set
+
+      if (!confirm(`Are you sure you want to delete period "${periodName}"?`)) return;
+
+      try {
+        const payload = { period_name: periodName };
+        const resp = await fetch('/delete_period', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await resp.json();
+        if (result.status === 'success') {
+          alert('Period deleted successfully!');
+          await loadSavedPeriods();
+        } else {
+          alert(`Error deleting period: ${result.message}`);
+        }
+      } catch (err) {
+        console.error('Error deleting period:', err);
+        alert('Failed to delete period.');
+      }
+    });
+
+    // 5) When user picks a period => auto-populate start/end date fields
+    document.getElementById('period-dropdown').addEventListener('change', function() {
+      const selectedOpt = this.options[this.selectedIndex];
+      const start = selectedOpt.dataset.start;
+      const end   = selectedOpt.dataset.end;
+      if (start) {
+        document.getElementById('start-date').value = start;
+      }
+      if (end) {
+        document.getElementById('end-date').value   = end;
+      }
+    });
+
+    // 5) ATTACH THE NEW EVENT LISTENER
+    document.getElementById('run-backtest-btn')
+      .addEventListener('click', collectAllInputsAndRunBacktest);
+
+    // ADDED: Listen for clicks on the new results/home buttons
+    const viewBtn = document.getElementById('view-results-btn');
+    const homeBtn = document.getElementById('go-home-btn');
+
+    // If user clicks "View Strategy Results" => lead to metrics_results.html or any route you prefer
+    viewBtn.addEventListener('click', () => {
+      window.location.href = '/show_metrics';
+    });
+
+    // If user clicks "Go Back to Home" => redirect to your homepage route
+    homeBtn.addEventListener('click', () => {
+      window.location.href = '/load_data';
+    });
+  async function loadAllStrategies() {
+  try {
+    const res = await fetch('/get_all_strategies');
+    const data = await res.json();
+    // data = { columns: [...], rows: [...] }
+
+    const table = document.getElementById('strategies-table');
+    if (!table) return;
+
+    table.innerHTML = '';
+
+    // If no data
+    if (!Array.isArray(data.columns) || data.columns.length === 0) {
+      table.innerHTML = '<tr><td>No strategies found.</td></tr>';
+      return;
+    }
+
+    // Add the extra columns for action buttons
+    const columns = [...data.columns, "delete_action", "download_deals", "show_results"];
+
+    // Build table header
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    columns.forEach(colName => {
+      const th = document.createElement('th');
+      if (colName === "delete_action") {
+        th.textContent = "Delete Strategy";
+      } else if (colName === "download_deals") {
+        th.textContent = "Download Deals";
+      } else if (colName === "show_results") {
+        th.textContent = "Show Results";
+      } else {
+        th.textContent = colName;
+      }
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+
+    // Build table body
+    const tbody = document.createElement('tbody');
+
+    data.rows.forEach(row => {
+      const tr = document.createElement('tr');
+
+      // For each "normal" column from data.columns
+      data.columns.forEach(colName => {
+        const td = document.createElement('td');
+        const val = row[colName];
+        td.textContent = (val !== null && val !== undefined) ? val : '';
+        tr.appendChild(td);
+      });
+
+      // 1) Delete Strategy button
+      const deleteTd = document.createElement('td');
+      const delBtn = document.createElement('button');
+      delBtn.className = "delete-strategy-btn";
+      delBtn.textContent = "Delete";
+      delBtn.dataset.folderPath = row.folder_path || "";
+      deleteTd.appendChild(delBtn);
+      tr.appendChild(deleteTd);
+
+      // 2) Download Deals button
+      const downloadTd = document.createElement('td');
+      const dlBtn = document.createElement('button');
+      dlBtn.className = "download-deals-btn";
+      dlBtn.textContent = "Download CSV";
+      dlBtn.dataset.folderPath = row.folder_path || "";
+      downloadTd.appendChild(dlBtn);
+      tr.appendChild(downloadTd);
+
+      // 3) Show Results button
+      const resultsTd = document.createElement('td');
+      const srBtn = document.createElement('button');
+      srBtn.className = "show-results-btn";
+      srBtn.textContent = "Show Results";
+      srBtn.dataset.folderPath = row.folder_path || "";
+      resultsTd.appendChild(srBtn);
+      tr.appendChild(resultsTd);
+
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    // Attach event listeners for action buttons
+    attachDeleteButtons();
+    attachDownloadButtons();
+    attachShowResultsButtons();
+
+  } catch (err) {
+    console.error('Error loading all strategies:', err);
+  }
+}
+
+  function attachDeleteButtons() {
+    document.querySelectorAll('.delete-strategy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const folderPath = btn.dataset.folderPath;
+        if (!confirm(`Delete entire folder?\n${folderPath}`)) return;
+
+        try {
+          const resp = await fetch('/delete_strategy_folder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ folder_path: folderPath })
+          });
+          const result = await resp.json();
+          if (result.status === 'success') {
+            alert("Folder deleted!");
+            // Refresh the table
+            loadAllStrategies();
+          } else {
+            alert("Error: " + (result.message || 'unknown'));
+          }
+        } catch (err) {
+          console.error('Delete strategy error:', err);
+          alert("Failed to delete strategy folder.");
+        }
+      });
+    });
+  }
+
+  function attachDownloadButtons() {
+    document.querySelectorAll('.download-deals-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const folderPath = btn.dataset.folderPath;
+        // We'll open: /download_deals_csv?folder=FOLDER_PATH in a new tab
+        // But folder path might have spaces => encode it
+        const encoded = encodeURIComponent(folderPath);
+        window.open(`/download_deals_csv?folder=${encoded}`, '_blank');
+      });
+    });
+  }
+
+  function attachShowResultsButtons() {
+    document.querySelectorAll('.show-results-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const folderPath = btn.dataset.folderPath;
+        // TODO: implement logic to navigate or fetch results
+        // e.g. window.location.href = `/show_metrics_for_folder?folder=${encodeURIComponent(folderPath)}`;
+        alert("Show Results for folder: " + folderPath + " (Not implemented yet.)");
+      });
+    });
+  }
+
+  // Hook up the "Load Strategies" button
+  const loadBtn = document.getElementById('load-strategies-btn');
+  if (loadBtn) {
+    loadBtn.addEventListener('click', () => {
+      loadAllStrategies();
+    });
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Fetcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #444;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        form input, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #dataSummary {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .summary-item {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .summary-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .summary-item h3 {
+            margin: 0 0 10px;
+            color: #444;
+        }
+
+        .summary-item p {
+            margin: 5px 0;
+        }
+
+        #loadingBarContainer {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: none;
+        }
+
+        #loadingBar {
+            background: #f3f3f3;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            height: 20px;
+        }
+
+        #loadingBarFill {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        #loadingText {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            form {
+                max-width: 90%;
+            }
+
+            #dataSummary {
+                max-width: 90%;
+            }
+        }
+    </style>
+    <script>
+        async function fetchData() {
+            const symbol = document.getElementById('symbol').value;
+            const eventSource = new EventSource(`/fetch_data?symbol=${encodeURIComponent(symbol)}`);
+
+            const loadingText = document.getElementById('loadingText');
+            const loadingBarFill = document.getElementById('loadingBarFill');
+            document.getElementById('loadingBarContainer').style.display = 'block';
+
+            eventSource.onmessage = (event) => {
+                const data = event.data;
+                if (data === 'complete') {
+                    alert(`Data fetched successfully for ${symbol}!`);
+                    loadSummary();
+                    document.getElementById('loadingBarContainer').style.display = 'none';
+                    eventSource.close();
+                } else if (data.startsWith('error')) {
+                    alert(`Error: ${data.replace('error ', '')}`);
+                    document.getElementById('loadingBarContainer').style.display = 'none';
+                    eventSource.close();
+                } else if (data.startsWith('Chunk')) {
+                    loadingText.textContent = data;
+                } else {
+                    loadingText.textContent = data;
+                }
+            };
+
+            eventSource.onerror = () => {
+                alert('An error occurred while fetching data.');
+                document.getElementById('loadingBarContainer').style.display = 'none';
+                eventSource.close();
+            };
+        }
+
+        // Function to delete a file and remove it dynamically from the list
+        async function deleteFile(filename) {
+            if (!confirm(`Are you sure you want to delete ${filename}?`)) {
+                return;
+            }
+
+            // Call the backend DELETE endpoint
+            const response = await fetch(`/delete_file?filename=${encodeURIComponent(filename)}`, {
+                method: 'DELETE'
+            });
+
+            const result = await response.json();
+            if (result.status === 'ok') {
+                alert(`File "${filename}" deleted successfully!`);
+                // Dynamically remove the file's HTML element
+                const fileElement = document.getElementById(`file-${CSS.escape(filename)}`);
+                if (fileElement) {
+                    fileElement.remove();
+                }
+            } else {
+                alert(`Error deleting file: ${result.message || 'Unknown error'}`);
+            }
+        }
+
+        // Load summary quickly by rendering only file metadata
+        async function loadSummary() {
+            const response = await fetch('/data_summary');
+            const summary = await response.json();
+
+            const summaryDiv = document.getElementById('dataSummary');
+            summaryDiv.innerHTML = ''; // Clear existing content
+
+            summary.forEach(item => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'summary-item';
+                fileDiv.id = `file-${item.file}`; // Unique ID for each file
+
+                fileDiv.innerHTML = `
+                    <h3>${item.file}</h3>
+                    <p><strong>Rows:</strong> ${item.rows}</p>
+                    <p><strong>Start Date:</strong> ${item.start_date}</p>
+                    <p><strong>End Date:</strong> ${item.end_date}</p>
+                    <a href="/static/${item.file}" download>
+                        <button>Download CSV</button>
+                    </a>
+                    <button style="margin-left:10px;" onclick="deleteFile('${item.file}')">
+                        Delete
+                    </button>
+                `;
+
+                summaryDiv.appendChild(fileDiv);
+            });
+        }
+
+        window.onload = loadSummary;
+    </script>
+</head>
+<body>
+    <h1>Data Fetcher</h1>
+    <form id="dataForm" onsubmit="event.preventDefault(); fetchData();">
+        <label for="symbol">Crypto Pair:</label>
+        <input type="text" id="symbol" name="symbol" placeholder="BTC/USDT" required>
+        <p id="errorMessage" class="error-message"></p>
+        <button type="submit">Fetch Data</button>
+    </form>
+
+    <div id="loadingBarContainer">
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+        <div id="loadingText">Fetching data: 0%</div>
+    </div>
+
+    <div id="dataSummary">
+        <!-- Summary items will appear here -->
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='/'">Back to Backtesting</button>
+
+</body>
+</html>

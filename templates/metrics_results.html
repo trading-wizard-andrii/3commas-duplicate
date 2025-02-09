@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Performance Metrics</title>
+    <link rel="stylesheet" href="/templates/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-card h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .metric-card p {
+            margin: 5px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Strategy Performance Metrics</h1>
+
+        <!-- Metrics Display -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h2>Net Profit (%)</h2>
+                <p>{{ metrics.net_profit | round(2) }}%</p>
+            </div>
+            <div class="metric-card">
+                <h2>Avg. Daily Profit (%)</h2>
+                <p>{{ metrics.average_daily_profit | round(4) }}</p>
+            </div>
+            <div class="metric-card">
+                <h2>Max Drawdown (%)</h2>
+                <p>{{ metrics.var_95 | round(2) }}%</p>
+            </div>
+            <div class="metric-card">
+                <h2>Win Rate (%)</h2>
+                <p>{{ (metrics.win_rate * 100) | round(2) }}%</p>
+            </div>
+            <div class="metric-card">
+                <h2>Sharpe Ratio</h2>
+                <p>{{ metrics.sharpe_ratio | round(2) }}</p>
+            </div>
+            <div class="metric-card">
+                <h2>Sortino Ratio</h2>
+                <p>{{ metrics.sortino_ratio | round(2) }}</p>
+            </div>
+            <div class="metric-card">
+                <h2>Profit Factor</h2>
+                <p>{{ metrics.profit_factor | round(2) }}</p>
+            </div>
+            <div class="metric-card">
+                <h2>Total Trades</h2>
+                <p>{{ metrics.total_trades }}</p>
+            </div>
+        </div>
+
+        <!-- Chart for Realized Balance -->
+        <div class="chart-container">
+            <h2>Realized Balance Over Time</h2>
+            <canvas id="realizedBalanceChart"></canvas>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-container">
+            <button class="btn" onclick="window.location.href='/'">Back to Backtesting</button>
+        </div>
+    </div>
+
+    <script>
+        // Data from Flask
+        var timestamps = JSON.parse('{{ chartData.timestamps | tojson | safe }}');
+        var realizedBalance = JSON.parse('{{ chartData.realized_balance | tojson | safe }}');
+
+        // Convert timestamps to readable format
+        var labels = timestamps.map(ts => new Date(ts).toLocaleDateString());
+
+        // Chart.js
+        var ctx = document.getElementById('realizedBalanceChart').getContext('2d');
+        var realizedBalanceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Realized Balance',
+                    data: realizedBalance,
+                    borderColor: '#007BFF',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { display: true, title: { display: true, text: 'Time' }},
+                    y: { display: true, title: { display: true, text: 'Balance ($)' }}
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

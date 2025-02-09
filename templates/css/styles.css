@@ -1,0 +1,434 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(to bottom, #f4f4f9, #e0e7ff);
+    margin: 0;
+    padding: 0;
+    color: #333;
+    text-align: center;
+}
+
+.add-condition-btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.add-condition-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.add-condition-btn:active {
+    background-color: #388e3c;
+    transform: translateY(1px);
+}
+
+/* General Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.toggle-switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Styling the toggle-label */
+.toggle-label {
+    font-size: 16px;
+    color: #333;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* Styled Button */
+.styled-button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+}
+
+.styled-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.styled-button:active {
+    background-color: #3e8e41;
+    transform: translateY(1px);
+}
+
+h1 {
+    margin-top: 30px;
+    font-size: 28px;
+    color: #3f51b5;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: bold;
+}
+
+.section {
+    background: #ffffff;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 90%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.section h2 {
+    margin: 0 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: #3f51b5;
+    font-weight: bold;
+    border-bottom: 2px solid #e0e7ff;
+    padding-bottom: 5px;
+}
+
+.section-content {
+    display: none;
+    margin-top: 15px;
+    background: #f9f9fc;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: inset 0px 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.toggle-arrow {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+    color: #3f51b5;
+    font-size: 18px;
+}
+
+.toggle-arrow.expanded {
+    transform: rotate(0);
+}
+
+/* Input Group Styles */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+    font-size: 14px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #3f51b5;
+    box-shadow: 0px 4px 8px rgba(63, 81, 181, 0.2);
+    outline: none;
+}
+
+/* Specific Styles for Date Inputs */
+.input-group input[type="date"] {
+    padding-right: 40px; /* Adjust padding to accommodate the calendar icon */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%23999" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zm0-13H5V6h14v1z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px 20px;
+    cursor: pointer;
+    position: relative; /* Ensures proper positioning of background image */
+}
+
+.input-group input[type="date"]::-webkit-inner-spin-button,
+.input-group input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Removed ::after pseudo-element to fix alignment */
+/*
+.input-group input[type="date"]::after {
+    content: '📅';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #999;
+}
+*/
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+#dropdown-toggle {
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#dropdown-toggle:hover {
+    background-color: #f4f4f4;
+    border-color: #3f51b5;
+    box-shadow: 0px 4px 8px rgba(63, 81, 181, 0.2);
+}
+
+.dropdown-list {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+    border-radius: 6px;
+}
+
+.dropdown-list.active {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-item.selected {
+    color: #3f51b5;
+    font-weight: bold;
+}
+
+.dropdown-item .checkmark {
+    display: none;
+    color: #3f51b5;
+    font-size: 16px;
+}
+
+.dropdown-item.selected .checkmark {
+    display: block;
+}
+
+/* Button Group Styles */
+.btn-group {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+}
+
+.btn.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Add Condition Styles */
+.add-condition {
+    display: inline-block;
+    margin-top: 10px;
+    color: #4CAF50;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+
+.add-condition:hover {
+    color: #3f51b5;
+}
+
+/* Target Profit Group */
+.target-profit-group {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Delete Condition and Target Buttons */
+.delete-condition-btn,
+.delete-target-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-condition-btn:hover,
+.delete-target-btn:hover {
+    background-color: #d32f2f;
+}
+
+.delete-target-btn {
+    background-color: #e53935;
+}
+
+.delete-target-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Centering the Run Backtest Button */
+.button-group {
+    text-align: center;
+    margin-top: 20px; /* Optional: Adds spacing above the button */
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Optional: Adds spacing above the button */
+}
+*/
+
+#all-strategies {
+      margin-top: 40px;
+    }
+
+    #all-strategies h2 {
+      margin-bottom: 1rem;
+    }
+
+    table.strategies-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto;
+      font-size: 14px;
+    }
+
+    table.strategies-table th, table.strategies-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    table.strategies-table th {
+      background-color: #f4f4f4;
+      font-weight: bold;
+    }
+
+    table.strategies-table tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    /* Optional: scroll if many columns */
+    .table-container {
+      overflow-x: auto;
+      max-width: 100%;
+    }
